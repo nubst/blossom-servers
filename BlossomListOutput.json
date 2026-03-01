@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "count": 15,
+  "relays_searched": 20,
+  "servers": [
+    "https://blossom.azzamo.media/",
+    "https://cdn.nostrcheck.me/",
+    "https://blossom.yakihonne.com/",
+    "https://blossom-02.uid.ovh/",
+    "https://blossom-01.uid.ovh/",
+    "https://blossom.sector01.com/",
+    "https://blossom.band/",
+    "https://24242.io/",
+    "https://cdn.sovbit.host/",
+    "https://loratu.bitcointxoko.com/",
+    "https://otherstuff.shaving.kiwi/",
+    "https://cdn.hzrd149.com/",
+    "https://blossom.nostr.hu/",
+    "https://blossom.nogood.studio/",
+    "https://nostr.download/"
+  ],
+  "timestamp": "2026-03-01T06:00:31.516Z"
+}
