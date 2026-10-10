@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "count": 1,
+  "relays_searched": 4,
+  "servers": [
+    "https://media.nostr.org.tr/"
+  ],
+  "timestamp": "2026-10-10T05:00:19.844Z"
+}
