@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "count": 2,
+  "relays_searched": 4,
+  "servers": [
+    "https://media.nostr.org.tr/",
+    "https://otherstuff.shaving.kiwi/"
+  ],
+  "timestamp": "2026-11-14T06:00:20.303Z"
+}
