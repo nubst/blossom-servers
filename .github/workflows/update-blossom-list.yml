@@ -1,0 +1,80 @@
+name: Update Blossom Server List
+
+on:
+  # Allow manual triggering
+  workflow_dispatch:
+  
+  # Triggered by webhook (e.g., from cron-job.org)
+  repository_dispatch:
+    types: [update-blossom-list]
+
+permissions:
+  contents: write
+
+jobs:
+  update-list:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      
+      - name: Fetch Blossom servers
+        run: node fetch-blossom-servers.js
+      
+      - name: Clear commit history and update file
+        run: |
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Save all necessary files to temp directory
+          mkdir -p /tmp/backup
+          cp README.md /tmp/backup/
+          cp BlossomListOutput.json /tmp/backup/
+          cp package.json /tmp/backup/
+          [ -f package-lock.json ] && cp package-lock.json /tmp/backup/ || true
+          cp fetch-blossom-servers.js /tmp/backup/
+          cp -r .github /tmp/backup/
+          [ -f .gitignore ] && cp .gitignore /tmp/backup/ || true
+          
+          # Create a new orphan branch (no history)
+          git checkout --orphan temp-branch
+          
+          # Remove all files from git index
+          git rm -rf . || true
+          
+          # Restore all necessary files from backup
+          cp /tmp/backup/README.md .
+          cp /tmp/backup/BlossomListOutput.json .
+          cp /tmp/backup/package.json .
+          [ -f /tmp/backup/package-lock.json ] && cp /tmp/backup/package-lock.json . || true
+          cp /tmp/backup/fetch-blossom-servers.js .
+          cp -r /tmp/backup/.github .
+          [ -f /tmp/backup/.gitignore ] && cp /tmp/backup/.gitignore . || true
+          
+          # Ensure node_modules not present
+          rm -rf node_modules
+          
+          # Stage all files
+          git add -A
+          
+          # Commit with timestamp
+          git commit -m "Update Blossom server list - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          
+          # Delete the old main branch and rename temp-branch to main
+          git branch -D main || true
+          git branch -m main
+          
+          # Force push to overwrite history
+          git push -f origin main
